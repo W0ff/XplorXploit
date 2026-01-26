@@ -53,6 +53,7 @@ const App: React.FC = () => {
     } catch (e) {
       console.error("Failed to load presets from local storage", e);
     }
+    // Fix: cast v to any to avoid "Property 'blocks' does not exist on type 'unknown'" error
     return Object.fromEntries(Object.entries(DEFAULT_PRESETS).map(([k, v]) => [k, (v as any).blocks]));
   });
   const [activePresetKey, setActivePresetKey] = useState<string>('recon');
@@ -69,6 +70,7 @@ const App: React.FC = () => {
   }, [activePresetKey]);
 
   const resetPresets = () => {
+    // Fix: cast v to any to avoid "Property 'blocks' does not exist on type 'unknown'" error
     const freshPresets = Object.fromEntries(Object.entries(DEFAULT_PRESETS).map(([k, v]) => [k, (v as any).blocks]));
     setPresets(freshPresets);
     localStorage.setItem('xplore_presets', JSON.stringify(freshPresets));
