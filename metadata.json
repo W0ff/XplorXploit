@@ -1,5 +1,6 @@
 {
   "name": "Xplore vs. Xploit",
+  "version": "1.0.0",
   "description": "An educational reinforcement learning game teaching the Multi-Armed Bandit problem through a hexagonal grid-based exploration and mining simulation.",
   "requestFramePermissions": []
 }

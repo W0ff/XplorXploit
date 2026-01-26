@@ -255,7 +255,7 @@ const App: React.FC = () => {
           </div>
           <div>
             <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">Xplore <span className="text-cyan-400">vs.</span> Xploit</h1>
-            <p className="text-xs text-slate-400 font-bold uppercase tracking-[0.2em] mt-1 opacity-60">Multi-Armed Bandit Simulation</p>
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-[0.2em] mt-1 opacity-60">Multi-Armed Bandit Simulation v1.0</p>
           </div>
         </div>
         <div className="flex gap-4">

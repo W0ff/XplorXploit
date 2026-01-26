@@ -48,7 +48,7 @@ const LearningPopup: React.FC<LearningPopupProps> = ({ onClose }) => {
             onClick={onClose}
             className="w-full bg-cyan-500 hover:bg-cyan-400 text-white font-black py-5 rounded-2xl uppercase tracking-widest transition-all shadow-lg shadow-cyan-500/20"
           >
-            I'm Ready to Strategize
+            Initialize Strategy Protocols
           </button>
         </div>
       </div>
