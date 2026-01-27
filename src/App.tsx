@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { HexCoord, TileData, LogicBlock, GameState, ActionType, ConditionType, OperatorType, EvaluationResult, DEFAULT_PRESETS } from './types';
+import { HexCoord, TileData, LogicBlock, GameState, OperatorType, EvaluationResult, DEFAULT_PRESETS } from './types';
 import { generateGrid, coordToKey, getNeighbors, getHexDistance } from './utils/hexUtils';
 import HexGrid from './components/HexGrid';
 import ManualControls from './components/ManualControls';
