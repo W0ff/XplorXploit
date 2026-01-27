@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { LogicBlock, TileData, HexCoord, DEFAULT_PRESETS } from '../types';
 import { coordToKey, getNeighbors } from '../utils/hexUtils';
 

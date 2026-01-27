@@ -22,7 +22,6 @@ export interface LogicBlock {
   compareWithHighest?: boolean;
 }
 
-// Added to break circular dependency
 export interface EvaluationResult {
   ruleId: string;
   met: boolean;
@@ -45,7 +44,6 @@ export const HEX_DIRECTIONS: HexCoord[] = [
   { q: -1, r: 0 }, { q: -1, r: 1 }, { q: 0, r: 1 }
 ];
 
-// Added to break circular dependency
 export const DEFAULT_PRESETS: Record<string, { name: string, description: string, blocks: LogicBlock[] }> = {
   recon: {
     name: "Standard Recon",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { LogicBlock, TileData, HexCoord } from '../types';
-import { coordToKey, getNeighbors, getHexDistance } from '../utils/hexUtils';
+import { coordToKey, getNeighbors } from '../utils/hexUtils';
 
 interface SimulationResult {
   score: number;
