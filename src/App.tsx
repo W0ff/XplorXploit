@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { HexCoord, TileData, LogicBlock, GameState, OperatorType, EvaluationResult, DEFAULT_PRESETS } from './types';
+import { HexCoord, TileData, LogicBlock, GameState, OperatorType, EvaluationResult, DEFAULT_PRESETS, MiningEffect } from './types';
 import { generateGrid, coordToKey, getNeighbors, getHexDistance } from './utils/hexUtils';
 import HexGrid from './components/HexGrid';
 import ManualControls from './components/ManualControls';
@@ -85,6 +85,7 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'manual' | 'strategy'>('manual');
   const [isAutoRunning, setIsAutoRunning] = useState(false);
   const [evaluationResults, setEvaluationResults] = useState<Record<string, EvaluationResult>>({});
+  const [miningEffects, setMiningEffects] = useState<MiningEffect[]>([]);
 
   const getRevealedGrid = (pos: HexCoord, currentGrid: Map<string, TileData>) => {
     const nextGrid = new Map(currentGrid);
@@ -125,15 +126,33 @@ const App: React.FC = () => {
 
   const handleMine = () => {
     if (gameState.turnsLeft <= 0 || gameState.gameStatus === 'FINISHED') return;
+    
+    // Trigger visual effect
+    const currentKey = coordToKey(gameState.currentHex.q, gameState.currentHex.r);
+    const tile = gameState.tiles.get(currentKey);
+    if (tile) {
+      const effect: MiningEffect = {
+        id: Math.random().toString(36).substr(2, 9),
+        val: tile.trueValue,
+        q: gameState.currentHex.q,
+        r: gameState.currentHex.r,
+        offset: { x: (Math.random() - 0.5) * 30, y: (Math.random() - 0.5) * 30 } // Random offset to separate rapid clicks
+      };
+      setMiningEffects(prev => [...prev, effect]);
+      setTimeout(() => {
+        setMiningEffects(prev => prev.filter(e => e.id !== effect.id));
+      }, 1000);
+    }
+
     setGameState(prev => {
-      const currentKey = coordToKey(prev.currentHex.q, prev.currentHex.r);
-      const tile = prev.tiles.get(currentKey)!;
+      const key = coordToKey(prev.currentHex.q, prev.currentHex.r);
+      const t = prev.tiles.get(key)!;
       const nextGrid = new Map(prev.tiles);
-      nextGrid.set(currentKey, { ...tile, minedCount: tile.minedCount + 1 });
+      nextGrid.set(key, { ...t, minedCount: t.minedCount + 1 });
       const nextTurns = prev.turnsLeft - 1;
       return {
         ...prev,
-        totalOre: prev.totalOre + tile.trueValue,
+        totalOre: prev.totalOre + t.trueValue,
         tiles: nextGrid,
         turnsLeft: nextTurns,
         gameStatus: nextTurns === 0 ? 'FINISHED' : 'PLAYING'
@@ -281,7 +300,12 @@ const App: React.FC = () => {
         <div className="lg:col-span-8 flex flex-col gap-4">
           <div className="bg-slate-900 rounded-[2.5rem] border-2 border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden min-h-[400px] md:min-h-[550px] lg:min-h-[600px] flex items-center justify-center p-4">
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-            <HexGrid tiles={gameState.tiles} currentHex={gameState.currentHex} onHexClick={activeTab === 'manual' ? handleMove : undefined} />
+            <HexGrid 
+              tiles={gameState.tiles} 
+              currentHex={gameState.currentHex} 
+              onHexClick={activeTab === 'manual' ? handleMove : undefined} 
+              miningEffects={miningEffects}
+            />
           </div>
           <div className="bg-slate-800/20 p-4 rounded-2xl border border-slate-700/30 flex justify-between items-center backdrop-blur-md">
             <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 uppercase tracking-widest">

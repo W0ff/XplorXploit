@@ -1,14 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
-import { HexCoord, TileData } from '../types';
+import { HexCoord, TileData, MiningEffect } from '../types';
 import { coordToKey, getHexDistance } from '../utils/hexUtils';
 
 interface HexGridProps {
   tiles: Map<string, TileData>;
   currentHex: HexCoord;
   onHexClick?: (coord: HexCoord) => void;
+  miningEffects?: MiningEffect[];
 }
 
-const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
+const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick, miningEffects = [] }) => {
   const [size, setSize] = useState(34);
 
   useEffect(() => {
@@ -160,6 +162,25 @@ const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
                 </div>
               )}
             </div>
+          </div>
+        );
+      })}
+      
+      {/* Floating Mining Effects Layer */}
+      {miningEffects.map(effect => {
+        const { x, y } = getPixelCoord(effect.q, effect.r);
+        return (
+          <div 
+            key={effect.id}
+            className="absolute pointer-events-none z-50 animate-float"
+            style={{ 
+              left: `${x + effect.offset.x}px`, 
+              top: `${y + effect.offset.y}px`,
+            }}
+          >
+            <span className={`text-4xl font-black drop-shadow-lg ${getTileValueColor(effect.val)}`}>
+              +{effect.val}
+            </span>
           </div>
         );
       })}

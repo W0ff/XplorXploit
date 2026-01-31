@@ -1,3 +1,4 @@
+
 export interface HexCoord {
   q: number;
   r: number;
@@ -7,6 +8,14 @@ export interface TileData extends HexCoord {
   trueValue: number;
   revealed: boolean;
   minedCount: number;
+}
+
+export interface MiningEffect {
+  id: string;
+  val: number;
+  q: number;
+  r: number;
+  offset: { x: number, y: number };
 }
 
 export type ActionType = 'SEEK_FRONTIER' | 'MOVE_HIGHEST_KNOWN' | 'MINE_CURRENT';
