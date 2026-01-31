@@ -209,31 +209,43 @@ const StrategyBuilder: React.FC<StrategyBuilderProps> = ({
       </div>
 
       <div className="pt-4 border-t border-slate-800 flex flex-col gap-3">
-        <button 
-          onClick={onRunMission}
-          disabled={isAutoRunning || strategy.length === 0}
-          className={`w-full py-4 rounded-2xl font-black uppercase tracking-widest text-lg transition-all
-            ${isAutoRunning ? 'bg-slate-800 text-slate-600' : 'bg-cyan-500 hover:bg-cyan-400 text-white shadow-lg'}
-          `}
-        >
-          {isAutoRunning ? 'In Progress...' : 'Execute Mission'}
-        </button>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex gap-3 h-14">
+          <button 
+            onClick={onRunMission}
+            disabled={isAutoRunning || strategy.length === 0}
+            className={`flex-1 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2
+              ${isAutoRunning ? 'bg-slate-800 text-slate-600' : 'bg-cyan-500 hover:bg-cyan-400 text-white shadow-[0_0_15px_rgba(6,182,212,0.4)]'}
+            `}
+          >
+            <i className="fa-solid fa-play text-sm"></i>
+            {isAutoRunning ? 'Running...' : 'Execute Mission'}
+          </button>
+          
           <button 
             onClick={onOpenSim}
             disabled={isAutoRunning || strategy.length === 0}
-            className="py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-xl text-[10px] uppercase font-black tracking-widest transition-all border border-slate-700/50"
+            className={`flex-1 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2
+              ${isAutoRunning 
+                ? 'bg-slate-800 text-slate-600' 
+                : 'bg-amber-500 hover:bg-amber-400 text-slate-900 shadow-[0_0_15px_rgba(245,158,11,0.4)]'}
+            `}
           >
-            <i className="fa-solid fa-chart-line mr-2"></i> Simulate
-          </button>
-          <button 
-            onClick={onOpenBench}
-            disabled={isAutoRunning}
-            className="py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-xl text-[10px] uppercase font-black tracking-widest transition-all border border-slate-700/50"
-          >
-            <i className="fa-solid fa-layer-group mr-2"></i> Compare All
+            <i className="fa-solid fa-infinity text-sm"></i>
+            Execute 100X
           </button>
         </div>
+        
+        <button 
+          onClick={onOpenBench}
+          disabled={isAutoRunning}
+          className={`w-full py-3 rounded-xl text-[10px] uppercase font-black tracking-widest transition-all border
+             ${isAutoRunning 
+                ? 'bg-slate-800 text-slate-600 border-slate-800' 
+                : 'bg-transparent hover:bg-amber-500/10 text-amber-500 border-amber-500/50 hover:border-amber-400'}
+          `}
+        >
+          <i className="fa-solid fa-layer-group mr-2"></i> Compare Strats
+        </button>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { HexCoord, TileData, LogicBlock, GameState, OperatorType, EvaluationResult, DEFAULT_PRESETS } from './types';
 import { generateGrid, coordToKey, getNeighbors, getHexDistance } from './utils/hexUtils';
@@ -278,7 +279,7 @@ const App: React.FC = () => {
 
       <main className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <div className="lg:col-span-8 flex flex-col gap-4">
-          <div className="bg-slate-900 rounded-[2.5rem] border-2 border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden min-h-[550px] lg:min-h-[600px] flex items-center justify-center p-4">
+          <div className="bg-slate-900 rounded-[2.5rem] border-2 border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden min-h-[400px] md:min-h-[550px] lg:min-h-[600px] flex items-center justify-center p-4">
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
             <HexGrid tiles={gameState.tiles} currentHex={gameState.currentHex} onHexClick={activeTab === 'manual' ? handleMove : undefined} />
           </div>

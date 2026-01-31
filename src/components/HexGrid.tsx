@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { HexCoord, TileData } from '../types';
 import { coordToKey, getHexDistance } from '../utils/hexUtils';
 
@@ -9,8 +9,28 @@ interface HexGridProps {
 }
 
 const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
-  // size = 34 ensures a 9-tile diameter grid fits within a ~550px container height
-  const size = 34; 
+  const [size, setSize] = useState(34);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      // Grid is roughly 14 hex units wide. 
+      // 375px screen - 32px padding = 343px avail.
+      // 343 / 14 = 24.5 max size.
+      if (width < 400) {
+        setSize(21);
+      } else if (width < 600) {
+        setSize(28);
+      } else {
+        setSize(34);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const width = size * 2;
   const height = Math.sqrt(3) * size;
   
@@ -26,6 +46,11 @@ const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
     if (val === 35) return 'text-orange-500 font-bold'; // High-Tier: Copper
     return 'text-slate-400'; // Standard
   };
+
+  // Adjust font sizes based on hex size
+  const textSize = size < 25 ? 'text-lg' : 'text-2xl';
+  const smallTextSize = size < 25 ? 'text-[7px]' : 'text-[9px]';
+  const iconSize = size < 25 ? 'text-lg' : 'text-2xl';
 
   return (
     <div className="relative">
@@ -72,7 +97,7 @@ const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
                     }
                   `}>
                     <span className={`font-mono leading-none transition-all
-                      ${isPlayerHere ? 'text-[9px] text-cyan-200 mt-1.5' : 'text-2xl'}
+                      ${isPlayerHere ? `${smallTextSize} text-cyan-200 mt-1.5` : textSize}
                       ${!isPlayerHere ? getTileValueColor(tile.trueValue) : ''}
                     `}>
                       {tile.trueValue}
@@ -90,7 +115,7 @@ const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
                 
                 {/* Obscured Icon for Fog of War Tiles */}
                 {!tile.revealed && (
-                  <div className="text-slate-800 text-2xl opacity-40 group-hover:opacity-100 transition-opacity">
+                  <div className={`text-slate-800 ${iconSize} opacity-40 group-hover:opacity-100 transition-opacity`}>
                     <i className="fa-solid fa-satellite-dish"></i>
                   </div>
                 )}
@@ -102,7 +127,7 @@ const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
                   {/* Custom Rocket SVG with a hole in the middle (porthole) */}
                   <svg 
                     viewBox="0 0 100 100" 
-                    className="w-16 h-16 transition-transform duration-300"
+                    className={`${size < 25 ? 'w-10 h-10' : 'w-16 h-16'} transition-transform duration-300`}
                   >
                     <path 
                       fill="currentColor" 
@@ -124,14 +149,14 @@ const HexGrid: React.FC<HexGridProps> = ({ tiles, currentHex, onHexClick }) => {
                       strokeWidth="3"
                     />
                   </svg>
-                  <div className="absolute w-16 h-16 rounded-full border-2 border-cyan-400/20 animate-ping"></div>
+                  <div className={`absolute ${size < 25 ? 'w-10 h-10' : 'w-16 h-16'} rounded-full border-2 border-cyan-400/20 animate-ping`}></div>
                 </div>
               )}
               
               {/* Movement indicator */}
               {canClick && (
                 <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                   <div className="w-12 h-12 rounded-full border-2 border-dashed border-cyan-500/20 animate-spin-slow"></div>
+                   <div className={`${size < 25 ? 'w-8 h-8' : 'w-12 h-12'} rounded-full border-2 border-dashed border-cyan-500/20 animate-spin-slow`}></div>
                 </div>
               )}
             </div>
