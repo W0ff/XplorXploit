@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogicBlock, ActionType, ConditionType, OperatorType, EvaluationResult, DEFAULT_PRESETS } from '../types';
+import StrategyWalkthrough from './StrategyWalkthrough';
 
 interface StrategyBuilderProps {
   strategy: LogicBlock[];
@@ -26,6 +27,28 @@ const StrategyBuilder: React.FC<StrategyBuilderProps> = ({
   isAutoRunning,
   evaluationResults
 }) => {
+  const [walkthroughStep, setWalkthroughStep] = useState(0);
+
+  useEffect(() => {
+    const seen = localStorage.getItem('xplore_strategy_walkthrough_seen');
+    if (!seen) {
+      setWalkthroughStep(1);
+    }
+  }, []);
+
+  const handleNext = () => {
+    if (walkthroughStep < 4) {
+      setWalkthroughStep(prev => prev + 1);
+    } else {
+      handleSkip();
+    }
+  };
+
+  const handleSkip = () => {
+    localStorage.setItem('xplore_strategy_walkthrough_seen', 'true');
+    setWalkthroughStep(0);
+  };
+
   const addBlock = () => {
     const newBlock: LogicBlock = {
       id: Math.random().toString(36).substr(2, 9),
@@ -55,7 +78,15 @@ const StrategyBuilder: React.FC<StrategyBuilderProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-6 h-full">
+    <div className="flex flex-col gap-6 h-full relative">
+      {walkthroughStep > 0 && (
+        <StrategyWalkthrough 
+          step={walkthroughStep} 
+          onNext={handleNext} 
+          onSkip={handleSkip} 
+        />
+      )}
+
       <div className="space-y-3">
         <div className="flex justify-between items-center">
           <h3 className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">Strategy Presets</h3>
